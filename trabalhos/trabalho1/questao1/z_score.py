@@ -2,8 +2,8 @@ import numpy as np
 
 class ZScore:
     def __init__(self) -> None:
-        self.mean = None
-        self.sd = None
+        self.mean : np.ndarray = None
+        self.sd : np.ndarray = None
     
     
     def fit(self, X : np.ndarray) -> None:
