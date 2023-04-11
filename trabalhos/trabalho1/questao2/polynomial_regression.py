@@ -28,14 +28,10 @@ class PolynomialRegression:
         return mse**(0.5)
     
     
-    def fit(self, X_train : np.ndarray, y_train : np.ndarray, degree : int, regularize : bool = False) -> None:
-        if regularize:
-            lamb = 0.01
-        else:
-            lamb = 0
+    def fit(self, X_train : np.ndarray, y_train : np.ndarray, degree : int, regularization_term : float = 0.0) -> None:
         self.degree = degree
         X_train = self.convert_degree(X_train, degree)
-        self.w = np.linalg.solve(X_train.T@X_train + lamb*np.eye(len(X_train.T@X_train)), X_train.T@y_train)
+        self.w = np.linalg.solve(X_train.T@X_train + regularization_term*np.eye(len(X_train.T@X_train)), X_train.T@y_train)
 
 
     def get_params(self):
