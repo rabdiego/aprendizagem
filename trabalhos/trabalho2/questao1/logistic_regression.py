@@ -22,6 +22,7 @@ class LogisticRegression:
     
     def fit(self, X_train : np.ndarray, y_train : np.ndarray, lr : float = 0.01, num_epochs : int = 100) -> None:
         self.w = np.ones((X_train.shape[1], 1))
+        self.log = list()
         for i in range(num_epochs):
             for j in range(X_train.shape[0]):
                 y_pred = sigmoid(self.w.T@X_train[j])
