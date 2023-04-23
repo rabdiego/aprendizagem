@@ -10,27 +10,13 @@ class SoftmaxRegression:
         
         
     def pred(self, X_test : np.ndarray) -> np.ndarray:
-        r = list()
-        den = np.zeros(X_test.shape[0]).reshape(-1,1)
-        for i in range(self.w.shape[0]):
-            r.append((X_test@self.w[i]).reshape(-1, 1))
-        
-        for i in range(len(r)):
-            den += np.exp(r[i])
-
-        for i in range(len(r)):
-            r[i] = np.exp(r[i])
-            r[i] /= den
-        
-        return_array = np.hstack((r[0], r[1]))
-        for i in range(2, len(r)):
-            return_array = np.hstack((return_array, r[i]))
-        return return_array
+        r = X_test@self.w.T
+        return (np.exp(r)/np.exp(r).sum())
     
     
     def get_mcce_loss(self, X_test : np.ndarray, y_test : np.ndarray) -> np.ndarray:
         y_pred : np.ndarray = self.pred(X_test)
-        mcce = -(np.sum(np.sum(y_test*y_pred, axis=0)))/(X_test.shape[0])
+        mcce = -(np.sum(np.sum(y_test*np.log2(y_pred), axis=1)))/(X_test.shape[0])
         return mcce
     
     
