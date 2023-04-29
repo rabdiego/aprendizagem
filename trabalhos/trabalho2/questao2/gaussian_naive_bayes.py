@@ -1,8 +1,5 @@
 import numpy as np
 
-def gaussian_probability(X_test, mean, variance):
-    return np.exp(-(((np.power((X_test - mean), 2))/(2*variance))))/np.sqrt(2*np.pi*variance)
-
 class GaussianNaiveBayes:
     def __init__(self) -> None:
         self.probabilities : np.ndarray = None
@@ -30,13 +27,8 @@ class GaussianNaiveBayes:
     
     
     def pred(self, X_test : np.ndarray) -> np.ndarray:
-        return_array = list()
-        for i in range(X_test.shape[0]):
-            Px_y = gaussian_probability(X_test[i], self.means, self.variances)
-            Px_y = np.array(Px_y)
-            Px_y = np.prod(Px_y[:, 0], axis=1)
-            Py_x = Px_y * self.probabilities
-            return_array.append(np.argmax(Py_x))
-        return_array = np.array(return_array)
-        return return_array.reshape(-1, 1)
+        predicted = np.zeros((self.classes.shape[0], X_test.shape[0]))
+        for i in range(len(self.classes)):
+            predicted[i] = np.log(self.probabilities[i]) - (0.5)*(np.log(2*np.pi*self.variances[i])).sum(axis=1) - (0.5)*(np.power((X_test - self.means[i]), 2)/self.variances[i]).sum(axis=1)
+        return np.argmax(predicted, axis=0)
     

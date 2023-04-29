@@ -29,9 +29,10 @@ class SoftmaxRegression:
                 y_pred = self.pred(np.array([X_train[j]]))
                 
                 error = y_train[j] - y_pred[0]
-                self.w += lr*(error.reshape(-1, 1))@(X_train[j].reshape(1, -1))
+                self.w += (lr*(error.reshape(-1, 1))@(X_train[j].reshape(1, -1)))
                 
                 self.log.append(self.get_mcce_loss(X_train, y_train).item())
+        
 
     
     def get_params(self) -> np.ndarray:
