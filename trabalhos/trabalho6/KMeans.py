@@ -1,6 +1,7 @@
 import numpy as np
 from sklearn.preprocessing import MinMaxScaler
 from scipy.spatial.distance import euclidean, mahalanobis
+from sklearn.metrics import davies_bouldin_score
 
 class KMeans:
     def __init__(self, n_clusters : int, distance : str = 'euclidian') -> None:
@@ -38,11 +39,15 @@ class KMeans:
                     self.centroids[j] = mean
     
 
-    def predict(self) -> np.ndarray:
+    def predict_points(self) -> np.ndarray:
         data = self.scaler.inverse_transform(self.data)
         indexes = self._find_partition()
         return np.array([data[np.where(indexes == i)[0]] for i in range(self.n_clusters)])
 
 
-    def get_centroids(self) -> np.ndarray:
-        return self.scaler.inverse_transform(self.centroids)
+    def predict_indexes(self) -> np.ndarray:
+        return self._find_partition()
+    
+
+    def get_db_index(self) -> float:
+        return davies_bouldin_score(self.data, self.predict_indexes())
