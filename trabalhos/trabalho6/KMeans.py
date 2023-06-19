@@ -27,12 +27,12 @@ class KMeans:
         return np.argmin(distance_matrix, axis=1)
 
 
-    def fit(self, data : np.ndarray, n_epochs : int = 100) -> None:
+    def fit(self, data : np.ndarray, n_epochs : int = 20) -> None:
         self.data = self._normalize_data(data)
         self.centroids : np.ndarray = np.random.rand(self.n_clusters, self.data.shape[1])
         for i in range(n_epochs):
             partitions = self._find_partition()
-            partitions_indexes = np.array([np.where(partitions == i)[0] for i in range(self.n_clusters)])
+            partitions_indexes = [np.where(partitions == i)[0] for i in range(self.n_clusters)]
             for j in range(self.n_clusters):
                 mean = np.mean(self.data[partitions_indexes[j]], axis=0)
                 if True not in np.isnan(mean):
@@ -42,7 +42,7 @@ class KMeans:
     def predict_points(self) -> np.ndarray:
         data = self.scaler.inverse_transform(self.data)
         indexes = self._find_partition()
-        return np.array([data[np.where(indexes == i)[0]] for i in range(self.n_clusters)])
+        return [data[np.where(indexes == i)[0]] for i in range(self.n_clusters)]
 
 
     def predict_indexes(self) -> np.ndarray:
@@ -51,3 +51,6 @@ class KMeans:
 
     def get_db_index(self) -> float:
         return davies_bouldin_score(self.data, self.predict_indexes())
+
+    def get_nclusters(self) -> int:
+        return self.n_clusters
